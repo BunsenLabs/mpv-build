@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+set -ex
+
+export DEBIAN_FRONTEND=noninteractive
+
+BUILDDIR=/build
+SCRIPTDIR=$(readlink -f "$(dirname "$0")")
+
+cp -vr -- "$SCRIPTDIR" "$BUILDDIR"
+
+cd "$BUILDDIR"
+
+apt-get update && apt-get -y upgrade
+
+apt-get install -y devscripts equivs
+
+git clean -d -f
+
+yes | mk-build-deps -i
+
+./use-mpv-release
+./use-ffmpeg-release
+./update
+
+sed -i 's/UNRELEASED/buster-backports/' ./debian/changelog
+
+dpkg-buildpackage -uc -us -b -j2
+
+cp -v -- ../*.{deb,changes} /output
+
+exit 0

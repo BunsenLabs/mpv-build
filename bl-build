@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+set -x
+
+SCRIPTDIR=$(readlink -f -- "$(dirname "$0")")
+OUTDIRamd64=/tmp/mpv/amd64
+OUTDIRi386=/tmp/mpv/i386
+
+mkdir -p "$OUTDIRamd64" "$OUTDIRi386"
+
+docker run \
+	--mount "type=bind,src=$SCRIPTDIR,dst=/source,readonly" \
+	--mount "type=bind,src=$OUTDIRamd64,dst=/output" \
+	--rm \
+	debian:buster \
+		'/source/bl-build-payload'
+
+docker run \
+	--mount "type=bind,src=$SCRIPTDIR,dst=/source,readonly" \
+	--mount "type=bind,src=$OUTDIRi386,dst=/output" \
+	--rm \
+	i386/debian:buster \
+		'/source/bl-build-payload'
