@@ -22,6 +22,8 @@ apt-get update && apt-get -y upgrade -t buster-backports
 
 apt-get install -y devscripts equivs -t buster-backports
 
+ln -s /usr/bin/python3 /usr/local/bin/python
+
 git clean -d -f
 
 yes | mk-build-deps -i
