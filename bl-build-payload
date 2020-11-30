@@ -13,9 +13,14 @@ cp -vr -- "$SCRIPTDIR" "$BUILDDIR"
 
 cd "$BUILDDIR"
 
-apt-get update && apt-get -y upgrade
+cat >/etc/apt/sources.list.d/backports.list <<EOF
+deb http://deb.debian.org/debian buster-backports main
+deb-src http://deb.debian.org/debian buster-backports main
+EOF
 
-apt-get install -y devscripts equivs
+apt-get update && apt-get -y upgrade -t buster-backports
+
+apt-get install -y devscripts equivs -t buster-backports
 
 git clean -d -f
 

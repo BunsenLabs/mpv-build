@@ -8,6 +8,9 @@ OUTDIRi386=/tmp/mpv/i386
 
 mkdir -p "$OUTDIRamd64" "$OUTDIRi386"
 
+docker pull debian:buster
+docker pull i386/debian:buster
+
 docker run \
 	--mount "type=bind,src=$SCRIPTDIR,dst=/source,readonly" \
 	--mount "type=bind,src=$OUTDIRamd64,dst=/output" \
